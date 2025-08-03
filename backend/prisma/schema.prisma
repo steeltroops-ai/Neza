@@ -1,0 +1,245 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id                String              @id @default(uuid())
+  email             String              @unique
+  password          String
+  firstName         String
+  lastName          String
+  phone             String?
+  profilePicture    String?
+  bio               String?
+  role              String              @default("CLIENT")
+  status            String              @default("PENDING")
+  isVerified        Boolean             @default(false)
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  wallet            Wallet?
+  providedServices  Service[]
+  bookingsAsClient  Booking[]           @relation("ClientBookings")
+  bookingsAsProvider Booking[]          @relation("ProviderBookings")
+  reviewsGiven      Review[]            @relation("ReviewsGiven")
+  reviewsReceived   Review[]            @relation("ReviewsReceived")
+  sentMessages      Message[]           @relation("MessageSender")
+  receivedMessages  Message[]           @relation("MessageReceiver")
+  notifications     Notification[]
+  documents         Document[]
+  verificationCodes VerificationCode[]
+  availability      Availability[]
+  disputesInitiated Dispute[]           @relation("DisputeInitiator")
+  disputesReceived  Dispute[]           @relation("DisputeReceiver")
+}
+
+model Wallet {
+  id            String        @id @default(uuid())
+  balance       Float         @default(0)
+  userId        String        @unique
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  transactions  Transaction[]
+}
+
+model Category {
+  id          String    @id @default(uuid())
+  name        String    @unique
+  description String?
+  icon        String?
+  services    Service[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Service {
+  id          String    @id @default(uuid())
+  title       String
+  description String
+  price       Float
+  duration    Int       // in minutes
+  location    String?
+  isRemote    Boolean   @default(false)
+  isActive    Boolean   @default(true)
+  providerId  String
+  provider    User      @relation(fields: [providerId], references: [id])
+  categoryId  String
+  category    Category  @relation(fields: [categoryId], references: [id])
+  bookings    Booking[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([providerId])
+  @@index([categoryId])
+}
+
+model Booking {
+  id                String          @id @default(uuid())
+  startTime         DateTime
+  endTime           DateTime
+  status            String          @default("PENDING")
+  notes             String?
+  clientId          String
+  client            User            @relation("ClientBookings", fields: [clientId], references: [id])
+  providerId        String
+  provider          User            @relation("ProviderBookings", fields: [providerId], references: [id])
+  serviceId         String
+  service           Service         @relation(fields: [serviceId], references: [id])
+  payment           Payment?
+  reviews           Review[]
+  messages          Message[]
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  @@index([clientId])
+  @@index([providerId])
+  @@index([serviceId])
+}
+
+model Payment {
+  id              String        @id @default(uuid())
+  amount          Float
+  currency        String        @default("USD")
+  status          String        @default("PENDING")
+  paymentMethod   String?
+  transactionId   String?
+  bookingId       String        @unique
+  booking         Booking       @relation(fields: [bookingId], references: [id])
+  transactions    Transaction[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([bookingId])
+}
+
+model Transaction {
+  id          String            @id @default(uuid())
+  amount      Float
+  type        String
+  status      String            @default("PENDING")
+  description String?
+  walletId    String
+  wallet      Wallet            @relation(fields: [walletId], references: [id])
+  paymentId   String?
+  payment     Payment?          @relation(fields: [paymentId], references: [id])
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@index([walletId])
+  @@index([paymentId])
+}
+
+model Review {
+  id          String    @id @default(uuid())
+  rating      Int
+  comment     String?
+  bookingId   String
+  booking     Booking   @relation(fields: [bookingId], references: [id])
+  reviewerId  String
+  reviewer    User      @relation("ReviewsGiven", fields: [reviewerId], references: [id])
+  receiverId  String
+  receiver    User      @relation("ReviewsReceived", fields: [receiverId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([bookingId])
+  @@index([reviewerId])
+  @@index([receiverId])
+}
+
+model Message {
+  id          String    @id @default(uuid())
+  content     String
+  isRead      Boolean   @default(false)
+  senderId    String
+  sender      User      @relation("MessageSender", fields: [senderId], references: [id])
+  receiverId  String
+  receiver    User      @relation("MessageReceiver", fields: [receiverId], references: [id])
+  bookingId   String?
+  booking     Booking?  @relation(fields: [bookingId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([senderId])
+  @@index([receiverId])
+  @@index([bookingId])
+}
+
+model Notification {
+  id          String            @id @default(uuid())
+  type        String
+  content     String
+  isRead      Boolean           @default(false)
+  userId      String
+  user        User              @relation(fields: [userId], references: [id])
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@index([userId])
+}
+
+model Document {
+  id          String          @id @default(uuid())
+  type        String
+  fileUrl     String
+  status      String          @default("PENDING")
+  userId      String
+  user        User            @relation(fields: [userId], references: [id])
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@index([userId])
+}
+
+model VerificationCode {
+  id          String    @id @default(uuid())
+  code        String
+  type        String
+  expiresAt   DateTime
+  isUsed      Boolean   @default(false)
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([userId])
+}
+
+model Availability {
+  id          String    @id @default(uuid())
+  dayOfWeek   Int       // 0-6, 0 is Sunday
+  startTime   String    // Format: HH:MM
+  endTime     String    // Format: HH:MM
+  isAvailable Boolean   @default(true)
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([userId])
+}
+
+model Dispute {
+  id              String        @id @default(uuid())
+  reason          String
+  description     String
+  status          String        @default("OPEN")
+  resolution      String?
+  initiatorId     String
+  initiator       User          @relation("DisputeInitiator", fields: [initiatorId], references: [id])
+  receiverId      String
+  receiver        User          @relation("DisputeReceiver", fields: [receiverId], references: [id])
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([initiatorId])
+  @@index([receiverId])
+}
