@@ -1,72 +1,129 @@
-import Link from "next/link";
-import Image from "next/image";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Star } from "lucide-react";
-
-interface Service {
-  id: string;
-  title: string;
-  description: string;
-  price: number;
-  currency: string;
-  unit: string;
-  rating: number;
-  reviewCount: number;
-  provider: {
-    id: string;
-    name: string;
-    avatar: string;
-  };
-  image: string;
-}
+import React from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { Star, MapPin, Clock, Shield } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 
 interface ServiceCardProps {
-  service: Service;
+  service: {
+    id: string;
+    title: string;
+    description: string;
+    price: number;
+    currency?: string;
+    unit?: string;
+    rating: number;
+    reviewCount: number;
+    image?: string;
+    providerId: string;
+    providerName: string;
+    providerImage?: string;
+    location: string;
+    tags?: string[];
+    categoryId?: string;
+    category?: string;
+  };
 }
 
-/**
- * Service card component displaying service information in a clickable card format.
- * Shows service title, description, pricing, rating, and provider information.
- * Features hover effects and responsive design.
- * 
- * @param service - Service object containing all service details
- * @returns JSX element representing a service card
- */
-export default function ServiceCard({ service }: ServiceCardProps) {
+export const ServiceCard: React.FC<ServiceCardProps> = ({ service }) => {
   return (
-    <Link href={`/services/${service.id}`}>
-      <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-        <div className="relative h-48 w-full">
-          <div className="w-full h-full bg-gradient-to-r from-blue-500 to-purple-600 rounded-t-lg flex items-center justify-center">
-            <span className="text-white text-4xl">🚀</span>
+    <Card className="card-modern hover-lift group">
+      <CardContent className="p-0">
+        <div className="relative aspect-video overflow-hidden rounded-t-2xl">
+          {service.image ? (
+            <Image
+              src={service.image}
+              alt={service.title}
+              fill
+              className="object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+          ) : (
+            <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+              <span className="text-gray-400 text-lg">No Image</span>
+            </div>
+          )}
+          <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 flex items-center gap-1">
+            <Star className="w-4 h-4 text-yellow-500 fill-current" />
+            <span className="text-sm font-semibold">{service.rating}</span>
           </div>
         </div>
-        <CardContent className="p-4">
-          <h3 className="font-semibold mb-2 line-clamp-2">{service.title}</h3>
-          <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-            {service.description}
-          </p>
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center">
-              <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-              <span className="text-sm font-medium ml-1">{service.rating}</span>
-              <span className="text-sm text-gray-500 ml-1">
-                ({service.reviewCount})
-              </span>
-            </div>
-            <Badge variant="secondary">
-              ${service.price} / {service.unit}
-            </Badge>
+        
+        <div className="p-6 space-y-4">
+          <div>
+            <h3 className="text-xl font-bold text-gray-900 group-hover:text-primary transition-colors mb-2">
+              <Link href={`/services/${service.id}`}>
+                {service.title}
+              </Link>
+            </h3>
+            <p className="text-gray-600 text-sm leading-relaxed line-clamp-2">
+              {service.description}
+            </p>
           </div>
-          <div className="flex items-center">
-            <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center mr-2">
-              <span className="text-xs">👤</span>
+
+          <div className="flex items-center justify-between text-sm text-gray-500">
+            <div className="flex items-center gap-1">
+              <MapPin className="w-4 h-4" />
+              <span>{service.location}</span>
             </div>
-            <span className="text-sm text-gray-600">{service.provider.name}</span>
+            <div className="flex items-center gap-1">
+              <span>({service.reviewCount} reviews)</span>
+            </div>
           </div>
-        </CardContent>
-      </Card>
-    </Link>
+
+          <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+            <div className="flex items-center gap-2">
+              {service.providerImage ? (
+                <div className="w-8 h-8 rounded-full overflow-hidden relative">
+                  <Image
+                    src={service.providerImage}
+                    alt={service.providerName}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              ) : (
+                <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
+                  <span className="text-xs font-semibold text-gray-600">
+                    {service.providerName.charAt(0)}
+                  </span>
+                </div>
+              )}
+              <div>
+                <p className="text-sm font-semibold text-gray-900">{service.providerName}</p>
+              </div>
+            </div>
+            
+            <div className="text-right">
+              <div className="text-2xl font-bold text-primary">
+                ${service.price}
+                {service.unit && (
+                  <span className="text-sm font-normal text-gray-500">/{service.unit}</span>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {service.tags && service.tags.length > 0 && (
+            <div className="flex flex-wrap gap-2 pt-2">
+              {service.tags.slice(0, 3).map((tag) => (
+                <span
+                  key={tag}
+                  className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
+
+          <Button asChild className="w-full btn-primary">
+            <Link href={`/services/${service.id}`}>
+              View Details
+            </Link>
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
   );
-}
+};

@@ -75,7 +75,7 @@ const mockServices = [
   {
     id: '104',
     title: 'Move-in/Move-out Cleaning',
-    description: 'Thorough cleaning service for when you're moving in or out of a property. Includes deep cleaning of all areas.',
+    description: 'Thorough cleaning service for when you\'re moving in or out of a property. Includes deep cleaning of all areas.',
     image: 'https://images.unsplash.com/photo-1600585152220-90363fe7e115?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
     providerId: '204',
     providerName: 'Moving Maids',

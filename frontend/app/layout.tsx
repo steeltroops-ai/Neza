@@ -8,8 +8,14 @@ import ClientProviders from "./client-providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Neza - Service Marketplace",
-  description: "Connect with skilled service providers for all your needs",
+  title: "Neza - Find Local Services & Trusted Providers",
+  description: "Connect with skilled local service providers in your area. From home repairs to tutoring, find trusted professionals for all your needs.",
+  keywords: "local services, service providers, home repair, tutoring, cleaning, plumbing, electrician, local business",
+  openGraph: {
+    title: "Neza - Your Local Services Marketplace",
+    description: "Find and book trusted local service providers in your neighborhood. Simple, reliable, community-focused.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({

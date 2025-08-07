@@ -35,10 +35,14 @@ export function useAuth() {
 }
 
 export function ClerkAuthProvider({ children }: { children: ReactNode }) {
-  const { user: clerkUser, isLoaded: isClerkLoaded } = useUser();
-  const { signOut } = useClerkAuth();
-  const { signIn, setActive: setSignInActive } = useSignIn();
-  const { signUp, setActive: setSignUpActive } = useSignUp();
+  // Temporary placeholder values until we migrate fully to direct Clerk hooks
+  const clerkUser = null;
+  const isClerkLoaded = true;
+  const signOut = async () => {};
+  const signIn = null;
+  const setSignInActive = async () => {};
+  const signUp = null;
+  const setSignUpActive = async () => {};
   
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);

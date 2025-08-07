@@ -58,7 +58,7 @@ const mockService = {
       user: 'Emily Davis',
       rating: 5,
       date: '2023-10-15',
-      comment: 'I've been using Clean Pro Services for 6 months now and they never disappoint. Highly recommended!',
+      comment: 'I\'ve been using Clean Pro Services for 6 months now and they never disappoint. Highly recommended!',
       userImageUrl: 'https://randomuser.me/api/portraits/women/56.jpg',
     },
   ],
@@ -86,28 +86,38 @@ export default function ServiceDetailsPage({ params }: { params: { id: string } 
     return () => clearTimeout(timer);
   }, [params.id]);
 
-  const handleBooking = () => {
-    if (!isAuthenticated) {
-      // Redirect to login page if not authenticated
-      router.push('/auth/login?redirect=' + encodeURIComponent(`/services/${params.id}`));
-      return;
+  const handleBooking = async () => {
+    try {
+      // Import dynamically to avoid SSR issues
+      const authModule = await import('@/lib/auth');
+      
+      // Check if user is authenticated by checking localStorage directly
+      const isAuthenticated = typeof window !== 'undefined' && localStorage.getItem('user') !== null;
+      
+      if (!isAuthenticated) {
+        // Redirect to login page if not authenticated
+        router.push('/auth/login?redirect=' + encodeURIComponent(`/services/${params.id}`));
+        return;
+      }
+
+      if (!selectedDate || !selectedTime) {
+        alert('Please select a date and time for your booking');
+        return;
+      }
+
+      // In a real app, you would call your booking API
+      console.log('Booking service', {
+        serviceId: params.id,
+        date: selectedDate,
+        time: selectedTime,
+        quantity,
+      });
+
+      // Redirect to booking confirmation page
+      router.push(`/dashboard/bookings/confirmation?service=${params.id}&date=${selectedDate}&time=${selectedTime}&quantity=${quantity}`);
+    } catch (error) {
+      console.error('Error during booking:', error);
     }
-
-    if (!selectedDate || !selectedTime) {
-      alert('Please select a date and time for your booking');
-      return;
-    }
-
-    // In a real app, you would call your booking API
-    console.log('Booking service', {
-      serviceId: params.id,
-      date: selectedDate,
-      time: selectedTime,
-      quantity,
-    });
-
-    // Redirect to booking confirmation page
-    router.push(`/dashboard/bookings/confirmation?service=${params.id}&date=${selectedDate}&time=${selectedTime}&quantity=${quantity}`);
   };
 
   if (isLoading) {
@@ -126,7 +136,7 @@ export default function ServiceDetailsPage({ params }: { params: { id: string } 
       <div className="container mx-auto py-12">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-red-500">Service Not Found</h1>
-          <p className="mt-4 text-gray-600">The service you're looking for doesn't exist or has been removed.</p>
+          <p className="mt-4 text-gray-600">The service you\'re looking for doesn\'t exist or has been removed.</p>
           <Button className="mt-6" asChild>
             <Link href="/services">Browse Services</Link>
           </Button>
@@ -411,7 +421,7 @@ export default function ServiceDetailsPage({ params }: { params: { id: string } 
                   </Button>
 
                   <p className="text-xs text-gray-500 text-center">
-                    You won't be charged yet. Payment will be collected after service completion.
+                    You won\'t be charged yet. Payment will be collected after service completion.
                   </p>
                 </div>
               </CardContent>

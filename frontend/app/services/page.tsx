@@ -1,624 +1,702 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import Link from 'next/link';
-import { Search, Filter, X, Grid, List, ArrowRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { ServiceCard } from '@/components/services/ServiceCard';
-import { CategoryCard } from '@/components/services/CategoryCard';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
+import { 
+  Search, 
+  Filter, 
+  X, 
+  Grid, 
+  List, 
+  ArrowRight, 
+  MapPin, 
+  Star, 
+  DollarSign,
+  Clock,
+  SlidersHorizontal,
+  ChevronDown,
+  Sparkles,
+  TrendingUp,
+  Users,
+  Award,
+  CheckCircle
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ServiceCard } from "@/components/ui/service-card";
+import { CategoryCard } from "@/components/ui/category-card";
+import { TrustBadge } from "@/components/ui/trust-badge";
+import { CTAButton } from "@/components/ui/cta-button";
 
-// Mock data for demonstration
+// Enhanced mock data with more realistic African service providers
 const mockCategories = [
-  { id: '1', name: 'Cleaning', imageUrl: '/placeholder.svg' },
-  { id: '2', name: 'Plumbing', imageUrl: '/placeholder.svg' },
-  { id: '3', name: 'Electrical', imageUrl: '/placeholder.svg' },
-  { id: '4', name: 'Gardening', imageUrl: '/placeholder.svg' },
-  { id: '5', name: 'Tutoring', imageUrl: '/placeholder.svg' },
-  { id: '6', name: 'Delivery', imageUrl: '/placeholder.svg' },
-  { id: '7', name: 'Beauty & Wellness', imageUrl: '/placeholder.svg' },
-  { id: '8', name: 'Home Repair', imageUrl: '/placeholder.svg' },
+  { 
+    id: "home-repair", 
+    name: "Home & Repair", 
+    count: 1247,
+    icon: "🏠",
+    colorClass: "category-home",
+    description: "Plumbing, electrical, maintenance",
+    trending: true,
+    avgPrice: "$45/hr",
+    growth: "23%"
+  },
+  { 
+    id: "cleaning", 
+    name: "Cleaning Services", 
+    count: 892,
+    icon: "✨",
+    colorClass: "category-cleaning",
+    description: "House, office, deep cleaning",
+    trending: true,
+    avgPrice: "$35/hr",
+    growth: "18%"
+  },
+  { 
+    id: "education", 
+    name: "Education & Tutoring", 
+    count: 756,
+    icon: "📚",
+    colorClass: "category-education",
+    description: "Academic support, languages",
+    trending: false,
+    avgPrice: "$25/hr"
+  },
+  { 
+    id: "beauty", 
+    name: "Beauty & Wellness", 
+    count: 634,
+    icon: "💅",
+    colorClass: "category-beauty",
+    description: "Hair, nails, massage, spa",
+    trending: false,
+    avgPrice: "$55/hr"
+  },
+  { 
+    id: "automotive", 
+    name: "Automotive", 
+    count: 423,
+    icon: "🚗",
+    colorClass: "category-auto",
+    description: "Car repair, maintenance",
+    trending: true,
+    avgPrice: "$65/hr",
+    growth: "15%"
+  },
+  { 
+    id: "delivery", 
+    name: "Delivery & Logistics", 
+    count: 512,
+    icon: "📦",
+    colorClass: "category-other",
+    description: "Boda boda, moving, errands",
+    trending: true,
+    avgPrice: "$20/hr",
+    growth: "35%"
+  }
 ];
 
 const mockServices = [
   {
-    id: '1',
-    title: 'Professional House Cleaning Service',
-    description: 'Comprehensive house cleaning service including dusting, vacuuming, mopping, bathroom cleaning, kitchen cleaning, and more.',
-    price: 75.00,
-    duration: 120, // 2 hours
-    category: 'Cleaning',
-    categoryId: '1',
-    rating: 4.8,
-    reviewCount: 124,
-    location: 'New York, NY',
-    isRemote: false,
-    imageUrl: '/placeholder.svg',
-    provider: {
-      id: '101',
-      name: 'Clean Pro Services',
-      rating: 4.9,
-    },
-  },
-  {
-    id: '2',
-    title: 'Emergency Plumbing Repair',
-    description: 'Fast and reliable emergency plumbing services. Available 24/7 for leaks, clogs, and other plumbing emergencies.',
-    price: 95.00,
-    duration: 60, // 1 hour
-    category: 'Plumbing',
-    categoryId: '2',
-    rating: 4.7,
-    reviewCount: 89,
-    location: 'Chicago, IL',
-    isRemote: false,
-    imageUrl: '/placeholder.svg',
-    provider: {
-      id: '102',
-      name: 'Quick Fix Plumbing',
-      rating: 4.8,
-    },
-  },
-  {
-    id: '3',
-    title: 'Electrical Installation and Repair',
-    description: 'Professional electrical services for residential and commercial properties. Installation, repair, and maintenance.',
-    price: 85.00,
-    duration: 90, // 1.5 hours
-    category: 'Electrical',
-    categoryId: '3',
+    id: "1",
+    name: "Sarah Nakamya",
+    service: "Professional House Cleaning & Organization",
     rating: 4.9,
-    reviewCount: 112,
-    location: 'Los Angeles, CA',
-    isRemote: false,
-    imageUrl: '/placeholder.svg',
-    provider: {
-      id: '103',
-      name: 'PowerTech Electric',
-      rating: 4.9,
-    },
+    reviews: 147,
+    location: "Kampala Central",
+    price: 35,
+    verified: true,
+    available: true,
+    responseTime: "~30 min",
+    completedJobs: 298,
+    specialties: ["Deep Cleaning", "Eco-Friendly", "Same Day Service"],
+    badge: "Top Rated"
   },
   {
-    id: '4',
-    title: 'Lawn Mowing and Garden Maintenance',
-    description: 'Regular lawn mowing and garden maintenance services. Keep your outdoor space looking beautiful all year round.',
-    price: 60.00,
-    duration: 120, // 2 hours
-    category: 'Gardening',
-    categoryId: '4',
+    id: "2",
+    name: "John Mugisha",
+    service: "Expert Plumbing & Electrical Services",
+    rating: 4.8,
+    reviews: 203,
+    location: "Ntinda",
+    price: 45,
+    verified: true,
+    available: true,
+    responseTime: "~45 min",
+    completedJobs: 456,
+    specialties: ["Emergency Repair", "Installation", "24/7 Service"]
+  },
+  {
+    id: "3",
+    name: "Grace Atukunda",
+    service: "Mathematics & Science Tutoring",
+    rating: 5.0,
+    reviews: 89,
+    location: "Makerere University Area",
+    price: 25,
+    verified: true,
+    available: false,
+    responseTime: "~1 hour",
+    completedJobs: 124,
+    specialties: ["STEM Subjects", "University Prep", "Online Classes"]
+  },
+  {
+    id: "4",
+    name: "David Ssemwanga",
+    service: "Complete Auto Repair & Detailing",
+    rating: 4.7,
+    reviews: 156,
+    location: "Industrial Area",
+    price: 65,
+    verified: true,
+    available: true,
+    responseTime: "~2 hours",
+    completedJobs: 289,
+    specialties: ["Engine Repair", "Body Work", "Car Detailing"],
+    badge: "Expert"
+  },
+  {
+    id: "5",
+    name: "Rose Nalwoga",
+    service: "Professional Hair & Beauty Services",
+    rating: 4.9,
+    reviews: 134,
+    location: "Kololo",
+    price: 55,
+    verified: true,
+    available: true,
+    responseTime: "~1 hour",
+    completedJobs: 245,
+    specialties: ["Hair Styling", "Makeup", "Bridal Services"]
+  },
+  {
+    id: "6",
+    name: "James Kiprotich",
+    service: "Fast Boda Boda & Delivery Services",
     rating: 4.6,
-    reviewCount: 78,
-    location: 'Austin, TX',
-    isRemote: false,
-    imageUrl: '/placeholder.svg',
-    provider: {
-      id: '104',
-      name: 'Green Thumb Gardens',
-      rating: 4.7,
-    },
+    reviews: 298,
+    location: "Multiple Areas",
+    price: 15,
+    verified: true,
+    available: true,
+    responseTime: "~10 min",
+    completedJobs: 1247,
+    specialties: ["Same Day Delivery", "City Wide", "Package Handling"],
+    badge: "Fast Response"
   },
   {
-    id: '5',
-    title: 'Math Tutoring for All Levels',
-    description: 'Expert math tutoring for students of all ages and levels. Personalized lessons to help improve grades and understanding.',
-    price: 45.00,
-    duration: 60, // 1 hour
-    category: 'Tutoring',
-    categoryId: '5',
-    rating: 4.9,
-    reviewCount: 156,
-    isRemote: true,
-    imageUrl: '/placeholder.svg',
-    provider: {
-      id: '105',
-      name: 'Academic Excellence',
-      rating: 4.9,
-    },
-  },
-  {
-    id: '6',
-    title: 'Same-Day Package Delivery',
-    description: 'Fast and reliable same-day package delivery service for local businesses and individuals.',
-    price: 25.00,
-    duration: 30, // 30 minutes
-    category: 'Delivery',
-    categoryId: '6',
-    rating: 4.7,
-    reviewCount: 92,
-    location: 'Seattle, WA',
-    isRemote: false,
-    imageUrl: '/placeholder.svg',
-    provider: {
-      id: '106',
-      name: 'Swift Delivery Co.',
-      rating: 4.8,
-    },
-  },
-  {
-    id: '7',
-    title: 'Professional Massage Therapy',
-    description: 'Relaxing and therapeutic massage services. Swedish, deep tissue, sports, and hot stone massages available.',
-    price: 80.00,
-    duration: 60, // 1 hour
-    category: 'Beauty & Wellness',
-    categoryId: '7',
+    id: "7",
+    name: "Agnes Namusoke",
+    service: "English & Communication Skills Tutor",
     rating: 4.8,
-    reviewCount: 134,
-    location: 'Miami, FL',
-    isRemote: false,
-    imageUrl: '/placeholder.svg',
-    provider: {
-      id: '107',
-      name: 'Wellness Therapy',
-      rating: 4.9,
-    },
+    reviews: 76,
+    location: "Nakasero",
+    price: 30,
+    verified: true,
+    available: true,
+    responseTime: "~2 hours",
+    completedJobs: 89,
+    specialties: ["Business English", "IELTS Prep", "Communication"]
   },
   {
-    id: '8',
-    title: 'Furniture Assembly Service',
-    description: 'Professional furniture assembly service for all types of furniture. Fast, efficient, and hassle-free.',
-    price: 65.00,
-    duration: 90, // 1.5 hours
-    category: 'Home Repair',
-    categoryId: '8',
+    id: "8",
+    name: "Peter Wanyama",
+    service: "Garden Landscaping & Maintenance",
     rating: 4.7,
-    reviewCount: 103,
-    location: 'Denver, CO',
-    isRemote: false,
-    imageUrl: '/placeholder.svg',
-    provider: {
-      id: '108',
-      name: 'Assembly Experts',
-      rating: 4.8,
-    },
-  },
+    reviews: 112,
+    location: "Bugolobi",
+    price: 40,
+    verified: true,
+    available: false,
+    responseTime: "~4 hours",
+    completedJobs: 167,
+    specialties: ["Landscape Design", "Plant Care", "Irrigation"]
+  }
 ];
 
+// Enhanced Search & Filter Component
+const SearchAndFilter = ({ 
+  searchQuery, 
+  setSearchQuery, 
+  selectedLocation, 
+  setSelectedLocation,
+  showFilters,
+  setShowFilters,
+  priceRange,
+  setPriceRange,
+  selectedRating,
+  setSelectedRating,
+  sortBy,
+  setSortBy
+}: any) => {
+  const locations = [
+    "All Locations",
+    "Kampala Central",
+    "Ntinda", 
+    "Kololo",
+    "Nakasero",
+    "Makerere",
+    "Industrial Area",
+    "Bugolobi"
+  ];
+
+  const sortOptions = [
+    { value: "recommended", label: "Recommended" },
+    { value: "rating", label: "Highest Rated" },
+    { value: "price-low", label: "Price: Low to High" },
+    { value: "price-high", label: "Price: High to Low" },
+    { value: "newest", label: "Newest First" }
+  ];
+
+  return (
+    <div className="space-y-6">
+      {/* Main Search Bar */}
+      <div className="search-enhanced p-2">
+        <div className="flex items-center">
+          {/* Location Selector */}
+          <div className="relative border-r border-gray-200">
+            <select
+              value={selectedLocation}
+              onChange={(e) => setSelectedLocation(e.target.value)}
+              className="px-6 py-4 bg-transparent border-none outline-none font-medium text-gray-700 cursor-pointer"
+            >
+              {locations.map((location) => (
+                <option key={location} value={location}>{location}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Search Input */}
+          <input
+            type="text"
+            placeholder="Search for services, providers, or skills..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="flex-1 px-6 py-4 text-gray-900 placeholder-gray-500 bg-transparent border-none outline-none text-lg font-medium"
+          />
+
+          {/* Filter Toggle */}
+          <button
+            onClick={() => setShowFilters(!showFilters)}
+            className={`px-4 py-4 border-l border-gray-200 hover:text-primary transition-colors ${showFilters ? 'text-primary bg-primary/5' : 'text-gray-600'}`}
+          >
+            <SlidersHorizontal className="w-5 h-5" />
+          </button>
+
+          {/* Search Button */}
+          <button
+            type="submit"
+            className="btn-primary px-8 py-4 text-lg font-bold rounded-xl flex items-center gap-3 shadow-glow"
+          >
+            <Search className="w-5 h-5" />
+            <span className="hidden sm:block">Search</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Advanced Filters */}
+      <AnimatePresence>
+        {showFilters && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="card-glass p-6 overflow-hidden"
+          >
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {/* Price Range */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-3">
+                  Price Range (per hour)
+                </label>
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      value={priceRange[1]}
+                      onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
+                      className="flex-1"
+                    />
+                  </div>
+                  <div className="flex items-center justify-between text-sm text-gray-600">
+                    <span>$0</span>
+                    <span className="font-bold text-primary">${priceRange[1]}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Rating Filter */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-3">
+                  Minimum Rating
+                </label>
+                <div className="space-y-2">
+                  {[4.5, 4.0, 3.5, 3.0].map((rating) => (
+                    <label key={rating} className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="rating"
+                        value={rating}
+                        checked={selectedRating === rating}
+                        onChange={(e) => setSelectedRating(parseFloat(e.target.value))}
+                        className="text-primary"
+                      />
+                      <div className="flex items-center gap-1">
+                        <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                        <span className="text-sm">{rating}+ stars</span>
+                      </div>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Sort Options */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-3">
+                  Sort By
+                </label>
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg bg-white focus:border-primary focus:ring-2 focus:ring-primary/10"
+                >
+                  {sortOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Quick Filters */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-3">
+                  Quick Filters
+                </label>
+                <div className="space-y-2">
+                  {["Available Now", "Verified Only", "Same Day", "Top Rated"].map((filter) => (
+                    <label key={filter} className="flex items-center gap-2 cursor-pointer">
+                      <input type="checkbox" className="text-primary rounded" />
+                      <span className="text-sm">{filter}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Clear Filters */}
+            <div className="flex justify-end mt-6 pt-6 border-t border-gray-200">
+              <Button 
+                variant="outline" 
+                onClick={() => {
+                  setSearchQuery("");
+                  setSelectedLocation("All Locations");
+                  setPriceRange([0, 100]);
+                  setSelectedRating(0);
+                  setSortBy("recommended");
+                }}
+                className="flex items-center gap-2"
+              >
+                <X className="w-4 h-4" />
+                Clear All Filters
+              </Button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+// Main Services Page Component
 export default function ServicesPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   
-  const [services, setServices] = useState<any[]>([]);
-  const [filteredServices, setFilteredServices] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('');
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 200]);
-  const [showMobileFilters, setShowMobileFilters] = useState(false);
+  // State Management
+  const [searchQuery, setSearchQuery] = useState(searchParams?.get("search") || "");
+  const [selectedLocation, setSelectedLocation] = useState("All Locations");
   const [showFilters, setShowFilters] = useState(false);
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [priceRange, setPriceRange] = useState([0, 100]);
+  const [selectedRating, setSelectedRating] = useState(0);
+  const [sortBy, setSortBy] = useState("recommended");
+  const [filteredServices, setFilteredServices] = useState(mockServices);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Filter services based on current filters
   useEffect(() => {
-    // In a real app, you would fetch services from your API
-    // For demo purposes, we'll use the mock data and add a delay
-    const timer = setTimeout(() => {
-      setServices(mockServices);
-      setFilteredServices(mockServices);
-      setIsLoading(false);
-      
-      // Apply any filters from URL params
-      const categoryParam = searchParams.get('category');
-      const searchParam = searchParams.get('search');
-      
-      if (categoryParam) {
-        setSelectedCategory(categoryParam);
-        filterServices(searchParam || '', categoryParam, priceRange);
-      } else if (searchParam) {
-        setSearchQuery(searchParam);
-        filterServices(searchParam, '', priceRange);
+    setIsLoading(true);
+    
+    let filtered = mockServices.filter((service) => {
+      // Search query filter
+      if (searchQuery && !service.name.toLowerCase().includes(searchQuery.toLowerCase()) && 
+          !service.service.toLowerCase().includes(searchQuery.toLowerCase())) {
+        return false;
       }
-    }, 1000);
-    
-    return () => clearTimeout(timer);
-  }, [searchParams]);
-  
-  useEffect(() => {
-    filterServices(searchQuery, selectedCategory, priceRange);
-  }, [searchQuery, selectedCategory, priceRange]);
-  
-  const filterServices = (query: string, category: string, price: [number, number]) => {
-    let filtered = [...services];
-    
-    if (query) {
-      filtered = filtered.filter(service => 
-        service.title.toLowerCase().includes(query.toLowerCase()) ||
-        service.description.toLowerCase().includes(query.toLowerCase())
-      );
+      
+      // Location filter
+      if (selectedLocation !== "All Locations" && service.location !== selectedLocation) {
+        return false;
+      }
+      
+      // Price filter
+      if (service.price > priceRange[1]) {
+        return false;
+      }
+      
+      // Rating filter
+      if (selectedRating > 0 && service.rating < selectedRating) {
+        return false;
+      }
+      
+      return true;
+    });
+
+    // Sort services
+    switch (sortBy) {
+      case "rating":
+        filtered.sort((a, b) => b.rating - a.rating);
+        break;
+      case "price-low":
+        filtered.sort((a, b) => a.price - b.price);
+        break;
+      case "price-high":
+        filtered.sort((a, b) => b.price - a.price);
+        break;
+      case "newest":
+        // Mock newest sort
+        filtered.reverse();
+        break;
+      default:
+        // Recommended - keep original order with some logic
+        filtered.sort((a, b) => b.rating * b.reviews - a.rating * a.reviews);
     }
-    
-    if (category) {
-      filtered = filtered.filter(service => service.categoryId === category);
-    }
-    
-    filtered = filtered.filter(service => 
-      service.price >= price[0] && service.price <= price[1]
-    );
-    
-    setFilteredServices(filtered);
-  };
-  
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    const params = new URLSearchParams();
-    
-    if (searchQuery) params.set('search', searchQuery);
-    if (selectedCategory) params.set('category', selectedCategory);
-    
-    const newUrl = `/services${params.toString() ? `?${params.toString()}` : ''}`;
-    router.push(newUrl);
-  };
-  
-  const clearFilters = () => {
-    setSearchQuery('');
-    setSelectedCategory('');
-    setPriceRange([0, 200]);
-    router.push('/services');
-  };
-  
-  if (isLoading) {
-    return (
-      <div className="container mx-auto py-12 flex justify-center items-center min-h-[60vh]">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading services...</p>
-        </div>
-      </div>
-    );
-  }
-  
+
+    setTimeout(() => {
+      setFilteredServices(filtered);
+      setIsLoading(false);
+    }, 300);
+  }, [searchQuery, selectedLocation, priceRange, selectedRating, sortBy]);
+
   return (
-    <div className="container mx-auto py-8 px-4 md:px-6">
-      <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold mb-2">Services</h1>
-          <p className="text-gray-600">Find the perfect service for your needs</p>
-        </div>
-        <div className="flex gap-2">
-          <Button variant="outline" asChild>
-            <Link href="/services/search">
-              <Search className="h-4 w-4 mr-2" />
-              Advanced Search
-            </Link>
-          </Button>
-          <Button variant="outline" asChild>
-            <Link href="/services/categories">
-              <Filter className="h-4 w-4 mr-2" />
-              Browse Categories
-            </Link>
-          </Button>
-        </div>
-      </div>
-      
-      {/* Featured Categories */}
-      <div className="mb-12">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold">Popular Categories</h2>
-          <Button variant="ghost" asChild>
-            <Link href="/services/categories" className="flex items-center">
-              View All <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {mockCategories.slice(0, 4).map(category => (
-            <CategoryCard 
-              key={category.id} 
-              category={{
-                id: category.id,
-                name: category.name,
-                description: `Find the best ${category.name.toLowerCase()} services`,
-                imageUrl: '/placeholder.svg',
-                serviceCount: Math.floor(Math.random() * 100) + 20,
-                popularServices: []
-              }}
-              variant="grid"
-            />
-          ))}
-        </div>
-      </div>
-      
-      {/* Main Content Tabs */}
-      <Tabs defaultValue="all" className="mb-8">
-        <div className="flex justify-between items-center mb-4">
-          <TabsList>
-            <TabsTrigger value="all">All Services</TabsTrigger>
-            <TabsTrigger value="featured">Featured</TabsTrigger>
-            <TabsTrigger value="popular">Popular</TabsTrigger>
-            <TabsTrigger value="new">New</TabsTrigger>
-          </TabsList>
-          <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={() => setViewMode('grid')} className={viewMode === 'grid' ? 'bg-gray-100' : ''}>
-              <Grid className="h-4 w-4" />
-            </Button>
-            <Button variant="outline" size="sm" onClick={() => setViewMode('list')} className={viewMode === 'list' ? 'bg-gray-100' : ''}>
-              <List className="h-4 w-4" />
-            </Button>
+    <div className="min-h-screen bg-gray-50">
+      {/* Header Section */}
+      <section className="bg-gradient-to-br from-primary/10 via-secondary/5 to-accent/10 py-16">
+        <div className="container">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center mb-12"
+          >
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+              Find Your Perfect <span className="text-gradient">Service Provider</span>
+            </h1>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Browse thousands of verified professionals ready to help with your needs
+            </p>
+          </motion.div>
+
+          {/* Trust Stats */}
+          <div className="flex justify-center gap-8 mb-12">
+            <TrustBadge type="users" value="10K+" label="Active Users" />
+            <TrustBadge type="verified" value="2.5K+" label="Verified Providers" />
+            <TrustBadge type="rating" value="4.9" label="Average Rating" />
           </div>
+
+          {/* Search and Filters */}
+          <SearchAndFilter
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            selectedLocation={selectedLocation}
+            setSelectedLocation={setSelectedLocation}
+            showFilters={showFilters}
+            setShowFilters={setShowFilters}
+            priceRange={priceRange}
+            setPriceRange={setPriceRange}
+            selectedRating={selectedRating}
+            setSelectedRating={setSelectedRating}
+            sortBy={sortBy}
+            setSortBy={setSortBy}
+          />
         </div>
-        
-        <TabsContent value="all" className="mt-0">
-          <div className="flex flex-col lg:flex-row gap-8">
-            {/* Filters - Desktop */}
-            <div className="hidden lg:block w-64 flex-shrink-0">
-              <div className="sticky top-24 space-y-6">
-                <div>
-                  <h3 className="text-lg font-medium mb-3">Categories</h3>
-                  <div className="space-y-2">
-                    <div className="flex items-center">
-                      <input
-                        type="radio"
-                        id="all-categories"
-                        name="category"
-                        checked={selectedCategory === ''}
-                        onChange={() => setSelectedCategory('')}
-                        className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
-                      />
-                      <label htmlFor="all-categories" className="ml-2 text-gray-700">
-                        All Categories
-                      </label>
-                    </div>
-                    
-                    {mockCategories.map(category => (
-                      <div key={category.id} className="flex items-center">
-                        <input
-                          type="radio"
-                          id={`category-${category.id}`}
-                          name="category"
-                          checked={selectedCategory === category.id}
-                          onChange={() => setSelectedCategory(category.id)}
-                          className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
-                        />
-                        <label htmlFor={`category-${category.id}`} className="ml-2 text-gray-700">
-                          {category.name}
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                
-                <div>
-                  <h3 className="text-lg font-medium mb-3">Price Range</h3>
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-sm text-gray-500">
-                      <span>${priceRange[0]}</span>
-                      <span>${priceRange[1]}</span>
-                    </div>
-                    <input
-                      type="range"
-                      min="0"
-                      max="200"
-                      value={priceRange[1]}
-                      onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
-                      className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                    />
-                  </div>
-                </div>
-                
-                {(searchQuery || selectedCategory || priceRange[0] > 0 || priceRange[1] < 200) && (
-                  <Button variant="outline" onClick={clearFilters} className="w-full">
-                    <X className="h-4 w-4 mr-2" />
-                    Clear Filters
-                  </Button>
-                )}
-              </div>
+      </section>
+
+      {/* Main Content */}
+      <section className="py-12">
+        <div className="container">
+          {/* Categories Section */}
+          <div className="mb-16">
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-3xl font-bold text-gray-900">Browse by Category</h2>
+              <Link href="/categories">
+                <Button variant="outline" className="flex items-center gap-2">
+                  View All
+                  <ArrowRight className="w-4 h-4" />
+                </Button>
+              </Link>
             </div>
             
-            {/* Main Content */}
-            <div className="flex-1">
-              {/* Search and Filter Bar */}
-              <div className="mb-6 flex flex-col sm:flex-row gap-4">
-                <form onSubmit={handleSearch} className="flex-1 flex">
-                  <div className="relative flex-1">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <Search className="h-5 w-5 text-gray-400" />
-                    </div>
-                    <Input
-                      type="text"
-                      placeholder="Search services..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-10"
-                    />
-                  </div>
-                  <Button type="submit" className="ml-2">
-                    Search
-                  </Button>
-                </form>
-                
-                <Button 
-                  variant="outline" 
-                  className="lg:hidden flex items-center"
-                  onClick={() => setShowFilters(!showFilters)}
-                >
-                  <Filter className="h-4 w-4 mr-2" />
-                  Filters
-                </Button>
-              </div>
-              
-              {/* Mobile Filters */}
-              {showFilters && (
-                <div className="lg:hidden mb-6 p-4 border rounded-lg bg-gray-50">
-                  <div className="space-y-4">
-                    <div>
-                      <h3 className="text-lg font-medium mb-2">Categories</h3>
-                      <div className="grid grid-cols-2 gap-2">
-                        <div className="flex items-center">
-                          <input
-                            type="radio"
-                            id="mobile-all-categories"
-                            name="mobile-category"
-                            checked={selectedCategory === ''}
-                            onChange={() => setSelectedCategory('')}
-                            className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
-                          />
-                          <label htmlFor="mobile-all-categories" className="ml-2 text-gray-700">
-                            All Categories
-                          </label>
-                        </div>
-                        
-                        {mockCategories.map(category => (
-                          <div key={`mobile-${category.id}`} className="flex items-center">
-                            <input
-                              type="radio"
-                              id={`mobile-category-${category.id}`}
-                              name="mobile-category"
-                              checked={selectedCategory === category.id}
-                              onChange={() => setSelectedCategory(category.id)}
-                              className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
-                            />
-                            <label htmlFor={`mobile-category-${category.id}`} className="ml-2 text-gray-700">
-                              {category.name}
-                            </label>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <h3 className="text-lg font-medium mb-2">Price Range</h3>
-                      <div className="space-y-2">
-                        <div className="flex justify-between text-sm text-gray-500">
-                          <span>${priceRange[0]}</span>
-                          <span>${priceRange[1]}</span>
-                        </div>
-                        <input
-                          type="range"
-                          min="0"
-                          max="200"
-                          value={priceRange[1]}
-                          onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
-                          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                        />
-                      </div>
-                    </div>
-                    
-                    <div className="flex justify-between">
-                      <Button variant="outline" onClick={clearFilters} className="w-1/2 mr-2">
-                        <X className="h-4 w-4 mr-2" />
-                        Clear
-                      </Button>
-                      <Button onClick={() => setShowFilters(false)} className="w-1/2 ml-2">
-                        Apply Filters
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              )}
-              
-              {/* Results Info */}
-              <div className="mb-4 flex justify-between items-center">
-                <p className="text-gray-600">
-                  {filteredServices.length} {filteredServices.length === 1 ? 'service' : 'services'} found
-                </p>
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center">
-                    <span className="text-gray-600 mr-2">Sort by:</span>
-                    <select 
-                      className="text-sm border-gray-300 rounded-md"
-                      defaultValue="relevance"
-                    >
-                      <option value="relevance">Relevance</option>
-                      <option value="price_low">Price: Low to High</option>
-                      <option value="price_high">Price: High to Low</option>
-                      <option value="rating">Highest Rating</option>
-                    </select>
-                  </div>
-                  <div className="flex items-center border rounded-md">
-                    <button 
-                      className={`p-2 ${viewMode === 'grid' ? 'bg-gray-100' : ''}`}
-                      onClick={() => setViewMode('grid')}
-                      aria-label="Grid view"
-                    >
-                      <Grid className="h-4 w-4" />
-                    </button>
-                    <button 
-                      className={`p-2 ${viewMode === 'list' ? 'bg-gray-100' : ''}`}
-                      onClick={() => setViewMode('list')}
-                      aria-label="List view"
-                    >
-                      <List className="h-4 w-4" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Services Display */}
-              {filteredServices.length > 0 ? (
-                viewMode === 'grid' ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                    {filteredServices.map(service => (
-                      <ServiceCard 
-                        key={service.id} 
-                        service={service} 
-                        variant="grid"
-                      />
-                    ))}
-                  </div>
-                ) : (
-                  <div className="flex flex-col gap-4">
-                    {filteredServices.map(service => (
-                      <ServiceCard 
-                        key={service.id} 
-                        service={service} 
-                        variant="list"
-                      />
-                    ))}
-                  </div>
-                )
-              ) : (
-                <div className="text-center py-12 bg-gray-50 rounded-lg">
-                  <h3 className="text-lg font-medium text-gray-900">No services found</h3>
-                  <p className="mt-2 text-gray-500">Try adjusting your search or filter criteria</p>
-                  <Button variant="outline" onClick={clearFilters} className="mt-4">
-                    Clear all filters
-                  </Button>
-                </div>
-              )}
-            </div>
-          </div>
-        </TabsContent>
-        
-        <TabsContent value="featured" className="mt-0">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {mockServices.slice(0, 3).map(service => (
-              <ServiceCard 
-                key={service.id} 
-                service={service} 
-                variant="grid"
-              />
-            ))}
-          </div>
-        </TabsContent>
-        
-        <TabsContent value="popular" className="mt-0">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {mockServices
-              .sort((a, b) => b.rating - a.rating)
-              .slice(0, 3)
-              .map(service => (
-                <ServiceCard 
-                  key={service.id} 
-                  service={service} 
-                  variant="grid"
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {mockCategories.slice(0, 6).map((category, index) => (
+                <CategoryCard
+                  key={category.id}
+                  category={category}
+                  variant="compact"
+                  index={index}
                 />
               ))}
+            </div>
           </div>
-        </TabsContent>
-        
-        <TabsContent value="new" className="mt-0">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {mockServices.slice(4, 7).map(service => (
-              <ServiceCard 
-                key={service.id} 
-                service={service} 
-                variant="grid"
-              />
-            ))}
+
+          {/* Results Section */}
+          <div className="space-y-6">
+            {/* Results Header */}
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900">
+                  {isLoading ? "Searching..." : `${filteredServices.length} Services Found`}
+                </h2>
+                {searchQuery && (
+                  <p className="text-gray-600 mt-1">
+                    Results for "<span className="font-semibold">{searchQuery}</span>"
+                  </p>
+                )}
+              </div>
+
+              {/* View Toggle */}
+              <div className="flex items-center gap-2 p-1 bg-gray-100 rounded-lg">
+                <button
+                  onClick={() => setViewMode("grid")}
+                  className={`p-2 rounded-md transition-colors ${
+                    viewMode === "grid" ? "bg-white text-primary shadow-sm" : "text-gray-600"
+                  }`}
+                >
+                  <Grid className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => setViewMode("list")}
+                  className={`p-2 rounded-md transition-colors ${
+                    viewMode === "list" ? "bg-white text-primary shadow-sm" : "text-gray-600"
+                  }`}
+                >
+                  <List className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+
+            {/* Results Grid/List */}
+            <AnimatePresence mode="wait">
+              {isLoading ? (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                >
+                  {[...Array(6)].map((_, i) => (
+                    <div key={i} className="card-modern p-6 animate-pulse">
+                      <div className="flex items-start gap-4 mb-4">
+                        <div className="w-16 h-16 bg-gray-200 rounded-2xl" />
+                        <div className="flex-1 space-y-2">
+                          <div className="h-4 bg-gray-200 rounded" />
+                          <div className="h-3 bg-gray-200 rounded w-3/4" />
+                          <div className="h-3 bg-gray-200 rounded w-1/2" />
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="h-3 bg-gray-200 rounded" />
+                        <div className="h-3 bg-gray-200 rounded w-2/3" />
+                      </div>
+                    </div>
+                  ))}
+                </motion.div>
+              ) : filteredServices.length > 0 ? (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className={
+                    viewMode === "grid"
+                      ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                      : "space-y-4"
+                  }
+                >
+                  {filteredServices.map((service, index) => (
+                    <motion.div
+                      key={service.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                    >
+                      <ServiceCard
+                        provider={service}
+                        variant={viewMode === "list" ? "compact" : "default"}
+                      />
+                    </motion.div>
+                  ))}
+                </motion.div>
+              ) : (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="text-center py-16"
+                >
+                  <div className="max-w-md mx-auto">
+                    <Search className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">No services found</h3>
+                    <p className="text-gray-600 mb-6">
+                      Try adjusting your search criteria or browse our categories
+                    </p>
+                    <CTAButton
+                      variant="primary"
+                      onClick={() => {
+                        setSearchQuery("");
+                        setSelectedLocation("All Locations");
+                        setPriceRange([0, 100]);
+                        setSelectedRating(0);
+                      }}
+                    >
+                      Clear Filters
+                    </CTAButton>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
-        </TabsContent>
-      </Tabs>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 bg-gradient-to-r from-primary to-secondary text-white">
+        <div className="container text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">
+              Can't Find What You're Looking For?
+            </h2>
+            <p className="text-xl mb-8 max-w-2xl mx-auto opacity-90">
+              Post your service request and let providers come to you with custom quotes
+            </p>
+            <CTAButton
+              variant="secondary"
+              size="lg"
+              glow
+              icon={<Sparkles className="w-5 h-5" />}
+              href="/request-service"
+            >
+              Post Service Request
+            </CTAButton>
+          </motion.div>
+        </div>
+      </section>
     </div>
   );
 }

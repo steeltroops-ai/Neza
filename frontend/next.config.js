@@ -12,9 +12,7 @@ const nextConfig = {
   },
   // Server Actions are available by default in Next.js 14.0.3
   // Add Clerk domains to allowed list
-  experimental: {
-    serverComponentsExternalPackages: ['@clerk/nextjs']
-  }
+  serverExternalPackages: ['@clerk/nextjs']
 };
 
 module.exports = nextConfig

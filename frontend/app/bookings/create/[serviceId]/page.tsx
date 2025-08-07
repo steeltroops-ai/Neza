@@ -121,21 +121,31 @@ export default function CreateBookingPage({ params }: { params: { serviceId: str
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!validateForm()) {
       return;
     }
     
-    if (!currentUser.isAuthenticated) {
-      // Redirect to login page if user is not authenticated
-      router.push('/auth/login?redirect=' + encodeURIComponent(`/bookings/create/${params.serviceId}`));
-      return;
+    try {
+      // Import dynamically to avoid SSR issues
+      const authModule = await import('@/lib/auth');
+      
+      // Check if user is authenticated by checking localStorage directly
+      const isAuthenticated = typeof window !== 'undefined' && localStorage.getItem('user') !== null;
+      
+      if (!isAuthenticated) {
+        // Redirect to login page if user is not authenticated
+        router.push('/auth/login?redirect=' + encodeURIComponent(`/bookings/create/${params.serviceId}`));
+        return;
+      }
+      
+      // In a real app, you would send a request to your API to create the booking
+      // For demo purposes, we'll just show an alert and redirect
+      alert('Booking created successfully!');
+      router.push('/bookings');
+    } catch (error) {
+      console.error('Error during booking creation:', error);
     }
-    
-    // In a real app, you would send a request to your API to create the booking
-    // For demo purposes, we'll just show an alert and redirect
-    alert('Booking created successfully!');
-    router.push('/bookings');
   };
 
   if (isLoading) {

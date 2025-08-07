@@ -144,7 +144,7 @@ Neza is a modern, scalable local services marketplace built for Africa. Starting
 ## 🧱 MVP SCOPE
 
 ### 🎯 Core Features
-
+design and 
 | For Users (Clients)                 | For Providers                  |
 | ----------------------------------- | ------------------------------ |
 | Signup/login (phone, email, Google) | Signup/login                   |

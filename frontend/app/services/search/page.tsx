@@ -187,7 +187,7 @@ export default function SearchPage() {
         {
           id: '6',
           title: 'Dog Walking and Pet Sitting',
-          description: 'Reliable dog walking and pet sitting services for when you're away or busy.',
+          description: 'Reliable dog walking and pet sitting services for when you\'re away or busy.',
           price: 25.00,
           duration: 30,
           category: 'Pet Care',

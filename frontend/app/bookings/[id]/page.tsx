@@ -36,13 +36,13 @@ const mockBooking = {
   updatedAt: '2023-08-02T09:15:00.000Z',
 };
 
-// Mock user data for demonstration
-const mockCurrentUser = {
-  id: '301', // Same as clientId in the booking to simulate the client view
-  role: 'client', // 'client' or 'provider'
-};
+// We'll use dynamic authentication instead of mock data
 
-export default function BookingDetailsPage({ params }: { params: { id: string } }) {
+interface PageProps {
+  params: Promise<{ id: string }>;
+}
+
+export default function BookingDetailsPage({ params }: PageProps) {
   const router = useRouter();
   const [booking, setBooking] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -50,20 +50,31 @@ export default function BookingDetailsPage({ params }: { params: { id: string } 
   const [isClient, setIsClient] = useState(false);
   const [isProvider, setIsProvider] = useState(false);
   const [confirmCancelDialog, setConfirmCancelDialog] = useState(false);
+  const [bookingId, setBookingId] = useState<string>('');
 
   useEffect(() => {
-    // In a real app, you would fetch booking data from your API using the params.id
-    // For demo purposes, we'll use the mock data and add a delay
-    const timer = setTimeout(() => {
-      setBooking(mockBooking);
-      setCurrentUser(mockCurrentUser);
-      setIsClient(mockCurrentUser.id === mockBooking.clientId);
-      setIsProvider(mockCurrentUser.id === mockBooking.providerId);
-      setIsLoading(false);
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, [params.id]);
+    // Resolve the async params
+    params.then((resolvedParams) => {
+      setBookingId(resolvedParams.id);
+      
+      // In a real app, you would fetch booking data from your API using the resolvedParams.id
+      // For demo purposes, we'll use the mock data and add a delay
+      const timer = setTimeout(() => {
+        setBooking(mockBooking);
+        
+        // Import dynamically to avoid SSR issues
+        import('@/lib/auth').then(({ getUser }) => {
+          const user = getUser();
+          if (user) {
+            setCurrentUser(user);
+            setIsClient(user.id === mockBooking.clientId);
+            setIsProvider(user.id === mockBooking.providerId);
+          }
+          setIsLoading(false);
+        });
+      }, 1000);
+    });
+  }, [params]);
 
   const getStatusBadgeClass = (status: string) => {
     switch (status) {
@@ -124,7 +135,7 @@ export default function BookingDetailsPage({ params }: { params: { id: string } 
   const handleEditBooking = () => {
     // In a real app, you would redirect to an edit page or open a modal
     // For demo purposes, we'll just redirect to a hypothetical edit page
-    router.push(`/bookings/edit/${params.id}`);
+    router.push(`/bookings/edit/${bookingId}`);
   };
 
   if (isLoading) {
@@ -197,7 +208,7 @@ export default function BookingDetailsPage({ params }: { params: { id: string } 
                     <div>
                       <p className="font-medium">Date & Time</p>
                       <p className="text-gray-600">
-                        {formatDate(booking.startDate, 'PPP')} • {formatDate(booking.startDate, 'p')} - {formatDate(booking.endDate, 'p')}
+                        {formatDate(booking.startDate)} • {new Date(booking.startDate).toLocaleTimeString()} - {new Date(booking.endDate).toLocaleTimeString()}
                       </p>
                     </div>
                   </div>
@@ -372,7 +383,7 @@ export default function BookingDetailsPage({ params }: { params: { id: string } 
                     </div>
                     <div>
                       <p className="font-medium">Booking Created</p>
-                      <p className="text-sm text-gray-500">{formatDate(booking.createdAt, 'PPp')}</p>
+                      <p className="text-sm text-gray-500">{formatDate(booking.createdAt)}</p>
                     </div>
                   </div>
 
@@ -396,7 +407,7 @@ export default function BookingDetailsPage({ params }: { params: { id: string } 
                           {booking.status === 'cancelled' && 'Booking Cancelled'}
                           {booking.status === 'completed' && 'Service Confirmed'}
                         </p>
-                        <p className="text-sm text-gray-500">{formatDate(booking.updatedAt, 'PPp')}</p>
+                        <p className="text-sm text-gray-500">{formatDate(booking.updatedAt)}</p>
                       </div>
                     </div>
                   )}
@@ -410,7 +421,7 @@ export default function BookingDetailsPage({ params }: { params: { id: string } 
                       </div>
                       <div>
                         <p className="font-medium">Service Completed</p>
-                        <p className="text-sm text-gray-500">{formatDate(booking.endDate, 'PPp')}</p>
+                        <p className="text-sm text-gray-500">{formatDate(booking.endDate)}</p>
                       </div>
                     </div>
                   )}
