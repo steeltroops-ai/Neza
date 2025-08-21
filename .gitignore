@@ -139,4 +139,10 @@ temp/
 *.sw?
 
 # Qodo files
-.qodo/
+.augment
+.augment/rules
+
+# clerk configuration (can include secrets)
+/.clerk/
+
+
