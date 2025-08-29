@@ -1,0 +1,60 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["dom", "dom.iterable", "ES2022"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": false,
+    "emitDeclarationOnly": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "composite": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@/components/*": ["./src/components/*"],
+      "@/lib/*": ["./src/lib/*"],
+      "@/hooks/*": ["./src/hooks/*"],
+      "@/types/*": ["./src/types/*"],
+      "@/styles/*": ["./src/styles/*"],
+      "@/utils/*": ["./src/utils/*"],
+      "@neza/ui": ["../../packages/ui/src"],
+      "@neza/ui/*": ["../../packages/ui/src/*"],
+      "@neza/config": ["../../packages/config/src"],
+      "@neza/config/*": ["../../packages/config/src/*"],
+      "@neza/database": ["../../packages/database/src"],
+      "@neza/database/*": ["../../packages/database/src/*"],
+      "@neza/utils": ["../../packages/utils/src"],
+      "@neza/utils/*": ["../../packages/utils/src/*"]
+    },
+    "forceConsistentCasingInFileNames": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "exactOptionalPropertyTypes": false
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "../../packages/ui/src/**/*.ts",
+    "../../packages/ui/src/**/*.tsx",
+    "../../packages/config/src/**/*.ts",
+    "../../packages/database/src/**/*.ts",
+    "../../packages/utils/src/**/*.ts"
+  ],
+  "exclude": ["node_modules", ".next", "dist", "../../packages/*/dist/**"]
+}

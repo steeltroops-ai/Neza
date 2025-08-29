@@ -9,6 +9,7 @@
 ## 🎯 BRAND PERSONALITY & CORE VALUES
 
 ### Brand Personality Matrix
+
 ```
 Primary Traits (80% of design decisions):
 • TRUSTWORTHY: Reliable, secure, transparent, professional
@@ -23,6 +24,7 @@ Secondary Traits (20% of design decisions):
 ```
 
 ### Emotional Target States
+
 **For Customers**: "I feel confident and secure booking services through Neza"
 **For Providers**: "Neza empowers my business growth with professional tools"
 **For Stakeholders**: "Neza represents the future of local service economies"
@@ -32,8 +34,10 @@ Secondary Traits (20% of design decisions):
 ## 🏆 DESIGN PRINCIPLES HIERARCHY
 
 ### 1. Trust-First Architecture (CRITICAL)
+
 **Principle**: Every visual element must reinforce security, reliability, and transparency
 **Implementation**:
+
 - Clear information hierarchy with no hidden costs or surprises
 - Professional imagery and consistent branding throughout
 - Security indicators prominently displayed (verified badges, escrow protection)
@@ -41,6 +45,7 @@ Secondary Traits (20% of design decisions):
 - Professional color palette that conveys stability and trust
 
 **Visual Cues**:
+
 - ✅ Verification checkmarks and trust badges
 - ✅ Professional provider photos and credentials
 - ✅ Clear pricing with no hidden fees
@@ -49,8 +54,10 @@ Secondary Traits (20% of design decisions):
 - ❌ Cluttered layouts that hide important information
 
 ### 2. Effortless Usability (CRITICAL)
+
 **Principle**: Complex functionality presented through intuitive, delightful interfaces
 **Implementation**:
+
 - Progressive disclosure - show only what's needed at each step
 - Consistent interaction patterns across all features
 - Clear visual feedback for all user actions
@@ -58,6 +65,7 @@ Secondary Traits (20% of design decisions):
 - Mobile-first responsive design
 
 **Interaction Patterns**:
+
 - ✅ One-click booking with smart defaults
 - ✅ Progressive forms with clear progress indicators
 - ✅ Instant feedback for all user actions
@@ -66,8 +74,10 @@ Secondary Traits (20% of design decisions):
 - ❌ Inconsistent button styles or interaction patterns
 
 ### 3. Premium Materiality (HIGH)
+
 **Principle**: Digital surfaces that evoke luxury and quality craftsmanship
 **Implementation**:
+
 - Sophisticated use of shadows, gradients, and depth
 - High-quality imagery and professional photography
 - Refined typography with careful spacing and hierarchy
@@ -75,6 +85,7 @@ Secondary Traits (20% of design decisions):
 - Premium color palette with sophisticated neutrals
 
 **Material Language**:
+
 - ✅ Subtle glassmorphism effects for cards and modals
 - ✅ Soft shadows that create natural depth
 - ✅ High-quality images with consistent treatment
@@ -83,8 +94,10 @@ Secondary Traits (20% of design decisions):
 - ❌ Low-quality or inconsistent imagery
 
 ### 4. Emotional Resonance (HIGH)
+
 **Principle**: Design creates positive emotional connections and memorable experiences
 **Implementation**:
+
 - Micro-interactions that delight and surprise
 - Personalized experiences that feel tailored
 - Success states that celebrate user achievements
@@ -92,6 +105,7 @@ Secondary Traits (20% of design decisions):
 - Consistent brand voice and personality
 
 **Emotional Touchpoints**:
+
 - ✅ Celebration animations for completed bookings
 - ✅ Personalized recommendations and greetings
 - ✅ Success states with positive reinforcement
@@ -104,6 +118,7 @@ Secondary Traits (20% of design decisions):
 ## 🎨 VISUAL DIRECTION KEYWORDS
 
 ### Primary Keywords (Guide 80% of decisions)
+
 - **CLEAN**: Uncluttered layouts, generous white space, clear hierarchy
 - **PROFESSIONAL**: Business-appropriate, credible, polished execution
 - **TRUSTWORTHY**: Transparent, reliable, secure visual language
@@ -111,6 +126,7 @@ Secondary Traits (20% of design decisions):
 - **LOCAL**: Community-focused, personal, accessible to all users
 
 ### Secondary Keywords (Guide 20% of decisions)
+
 - **MODERN**: Contemporary, up-to-date, technologically current
 - **EFFICIENT**: Streamlined, fast, optimized user flows
 - **WELCOMING**: Inclusive, friendly, approachable tone
@@ -122,6 +138,7 @@ Secondary Traits (20% of design decisions):
 ## ✅ DESIGN DO'S AND DON'TS
 
 ### Visual Hierarchy DO'S
+
 ✅ **Use consistent spacing system** (8px grid) for all layouts
 ✅ **Establish clear information hierarchy** with typography and color
 ✅ **Group related elements** with consistent spacing and visual treatment
@@ -130,6 +147,7 @@ Secondary Traits (20% of design decisions):
 ✅ **Apply progressive disclosure** to manage complexity
 
 ### Visual Hierarchy DON'TS
+
 ❌ **Mix different spacing systems** or use arbitrary spacing values
 ❌ **Create competing focal points** that confuse user attention
 ❌ **Overcrowd interfaces** with too many elements or information
@@ -138,6 +156,7 @@ Secondary Traits (20% of design decisions):
 ❌ **Create visual chaos** with too many colors, fonts, or styles
 
 ### Color & Typography DO'S
+
 ✅ **Use high contrast ratios** (4.5:1 minimum) for accessibility
 ✅ **Maintain consistent color meanings** across all interfaces
 ✅ **Apply typography hierarchy** consistently throughout the platform
@@ -146,6 +165,7 @@ Secondary Traits (20% of design decisions):
 ✅ **Create semantic color system** with clear usage guidelines
 
 ### Color & Typography DON'TS
+
 ❌ **Use low contrast combinations** that fail accessibility standards
 ❌ **Mix too many font families** or create inconsistent typography
 ❌ **Apply colors arbitrarily** without systematic meaning or purpose
@@ -154,6 +174,7 @@ Secondary Traits (20% of design decisions):
 ❌ **Create inconsistent text treatments** across similar interface elements
 
 ### Interaction & Animation DO'S
+
 ✅ **Provide immediate feedback** for all user interactions
 ✅ **Use subtle animations** that enhance rather than distract
 ✅ **Maintain consistent interaction patterns** across all features
@@ -162,6 +183,7 @@ Secondary Traits (20% of design decisions):
 ✅ **Test interactions** on actual devices and different screen sizes
 
 ### Interaction & Animation DON'TS
+
 ❌ **Leave users guessing** about the result of their actions
 ❌ **Use excessive animations** that slow down or distract from tasks
 ❌ **Create inconsistent interaction patterns** that confuse users
@@ -174,6 +196,7 @@ Secondary Traits (20% of design decisions):
 ## 🎯 COMPETITIVE DIFFERENTIATION STRATEGY
 
 ### Inspiration Benchmarks (Study and Adapt)
+
 - **Airbnb**: Trust-building through design, professional photography, clear booking flows
 - **Stripe**: Developer-friendly design systems, clean payment interfaces, technical elegance
 - **Apple**: Premium materiality, accessibility leadership, attention to detail
@@ -181,9 +204,11 @@ Secondary Traits (20% of design decisions):
 - **Revolut**: Fintech trust signals, progressive disclosure, security emphasis
 
 ### Neza's Unique Position
+
 **"Premium local services platform that combines Airbnb's trust-building with Stripe's technical elegance and Apple's premium materiality"**
 
 ### Differentiation Opportunities
+
 1. **Trust-First Design**: More comprehensive verification and security indicators than competitors
 2. **Premium Materiality**: Higher-quality visual treatment than typical marketplace platforms
 3. **Local Focus**: Community-centered design language that feels personal and accessible
@@ -195,18 +220,21 @@ Secondary Traits (20% of design decisions):
 ## 📱 PLATFORM-SPECIFIC CONSIDERATIONS
 
 ### Mobile-First Philosophy
+
 - **Touch-Friendly**: All interactive elements minimum 44px touch targets
 - **Thumb-Optimized**: Primary actions within comfortable thumb reach
 - **Performance-Focused**: Optimized for slower connections and older devices
 - **Context-Aware**: Location and time-sensitive features prominently displayed
 
 ### Desktop Enhancement
+
 - **Information Density**: Take advantage of larger screens for richer information display
 - **Multi-Column Layouts**: Efficient use of horizontal space for dashboards and listings
 - **Hover States**: Sophisticated micro-interactions for desktop users
 - **Keyboard Navigation**: Full keyboard accessibility for power users
 
 ### Future Platform Considerations
+
 - **Native Apps**: Design system must translate to iOS and Android native patterns
 - **Voice Interfaces**: Consider voice-first interactions for booking and status updates
 - **AR/VR**: Prepare for augmented reality service visualization features
@@ -217,6 +245,7 @@ Secondary Traits (20% of design decisions):
 ## 🔍 QUALITY ASSURANCE FRAMEWORK
 
 ### Design Review Checklist
+
 - [ ] **Trust Signals**: Are verification badges, security indicators, and transparency elements prominent?
 - [ ] **Accessibility**: Does the design meet WCAG 2.1 AA+ standards for contrast, sizing, and navigation?
 - [ ] **Consistency**: Are colors, typography, spacing, and interaction patterns consistent with the system?
@@ -225,6 +254,7 @@ Secondary Traits (20% of design decisions):
 - [ ] **Brand Alignment**: Does the design reinforce Neza's premium, trustworthy, local brand personality?
 
 ### Success Metrics
+
 - **User Trust**: Measured through conversion rates and user feedback
 - **Usability**: Task completion rates and time-to-completion metrics
 - **Accessibility**: Compliance testing and user testing with assistive technologies
@@ -233,4 +263,4 @@ Secondary Traits (20% of design decisions):
 
 ---
 
-**Design Philosophy Commitment**: Every design decision must pass the "Trust, Premium, Local, Efficient" test - if it doesn't reinforce these core values, it doesn't belong in Neza.**
+**Design Philosophy Commitment**: Every design decision must pass the "Trust, Premium, Local, Efficient" test - if it doesn't reinforce these core values, it doesn't belong in Neza.\*\*

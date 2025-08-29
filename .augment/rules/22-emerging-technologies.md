@@ -1,6 +1,6 @@
 ---
-type: "manual"
-description: "Example description"
+type: 'manual'
+description: 'Example description'
 ---
 
 # Emerging Technologies & Next-Generation Systems Rules

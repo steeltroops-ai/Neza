@@ -1,6 +1,6 @@
 ---
-type: "agent_requested"
-description: "Example description"
+type: 'agent_requested'
+description: 'Example description'
 ---
 
 # Advanced Futuristic UI/UX Patterns Guide

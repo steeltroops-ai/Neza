@@ -1,5 +1,5 @@
 ---
-type: "always_apply"
+type: 'always_apply'
 ---
 
 # Modern Development Standards Rules

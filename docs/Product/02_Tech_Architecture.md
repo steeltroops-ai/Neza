@@ -9,6 +9,7 @@
 ## 🎯 TECHNOLOGY STACK JUSTIFICATION
 
 ### Velocity-First Stack (Recommended for MVP)
+
 **Philosophy**: Ship fast, validate market, scale intelligently
 
 ```typescript
@@ -23,6 +24,7 @@ Monitoring: Sentry for error tracking + performance
 ```
 
 ### Why These Choices
+
 - **Next.js**: Server components, API routes, SSR/SSG, image optimization - fastest UI development
 - **Supabase**: Auth, Postgres, storage, realtime - minimal boilerplate, instant API
 - **TypeScript**: Single language across frontend/backend - fastest iteration, fewer context switches
@@ -34,6 +36,7 @@ Monitoring: Sentry for error tracking + performance
 ## 🏗️ SYSTEM ARCHITECTURE OVERVIEW
 
 ### High-Level Architecture
+
 ```
 ┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
 │   Client Apps   │    │   Edge/CDN       │    │   Core Services │
@@ -57,113 +60,118 @@ Monitoring: Sentry for error tracking + performance
 
 ### MVP vs. Scalable Architecture Trade-offs
 
-| Component | MVP Approach | Scalable Approach | Migration Path |
-|-----------|--------------|-------------------|----------------|
-| **Database** | Single Postgres | Sharded + Read Replicas | Add replicas, then shard |
-| **Auth** | Supabase Auth | Custom JWT + Refresh | Migrate gradually |
-| **Search** | MeiliSearch | Elasticsearch/OpenSearch | Data migration + API swap |
-| **Files** | Supabase Storage | CDN + Object Storage | Migrate files, update URLs |
-| **Cache** | Supabase Cache | Redis Cluster | Add Redis, deprecate old |
+| Component    | MVP Approach     | Scalable Approach        | Migration Path             |
+| ------------ | ---------------- | ------------------------ | -------------------------- |
+| **Database** | Single Postgres  | Sharded + Read Replicas  | Add replicas, then shard   |
+| **Auth**     | Supabase Auth    | Custom JWT + Refresh     | Migrate gradually          |
+| **Search**   | MeiliSearch      | Elasticsearch/OpenSearch | Data migration + API swap  |
+| **Files**    | Supabase Storage | CDN + Object Storage     | Migrate files, update URLs |
+| **Cache**    | Supabase Cache   | Redis Cluster            | Add Redis, deprecate old   |
 
 ---
 
 ## 🔧 CORE SERVICE DEFINITIONS
 
 ### 1. Authentication Service
+
 **Responsibility**: User identity, session management, role-based access
 
 ```typescript
 interface AuthService {
   // User Management
-  registerUser(email: string, role: UserRole): Promise<User>
-  verifyOTP(userId: string, otp: string): Promise<AuthToken>
-  refreshToken(refreshToken: string): Promise<AuthToken>
-  
+  registerUser(email: string, role: UserRole): Promise<User>;
+  verifyOTP(userId: string, otp: string): Promise<AuthToken>;
+  refreshToken(refreshToken: string): Promise<AuthToken>;
+
   // Role Management
-  assignRole(userId: string, role: UserRole): Promise<void>
-  checkPermission(userId: string, resource: string): Promise<boolean>
+  assignRole(userId: string, role: UserRole): Promise<void>;
+  checkPermission(userId: string, resource: string): Promise<boolean>;
 }
 
-type UserRole = 'customer' | 'provider' | 'admin'
+type UserRole = 'customer' | 'provider' | 'admin';
 ```
 
 ### 2. Provider Service
+
 **Responsibility**: Provider onboarding, verification, service management
 
 ```typescript
 interface ProviderService {
   // Onboarding
-  createProvider(userId: string, businessInfo: BusinessInfo): Promise<Provider>
-  uploadVerificationDocs(providerId: string, docs: Document[]): Promise<void>
-  verifyProvider(providerId: string, adminId: string): Promise<void>
-  
+  createProvider(userId: string, businessInfo: BusinessInfo): Promise<Provider>;
+  uploadVerificationDocs(providerId: string, docs: Document[]): Promise<void>;
+  verifyProvider(providerId: string, adminId: string): Promise<void>;
+
   // Service Management
-  createService(providerId: string, service: ServiceInfo): Promise<Service>
-  updateAvailability(providerId: string, schedule: Schedule): Promise<void>
-  getProvidersByLocation(lat: number, lng: number, radius: number): Promise<Provider[]>
+  createService(providerId: string, service: ServiceInfo): Promise<Service>;
+  updateAvailability(providerId: string, schedule: Schedule): Promise<void>;
+  getProvidersByLocation(lat: number, lng: number, radius: number): Promise<Provider[]>;
 }
 ```
 
 ### 3. Booking Service
+
 **Responsibility**: Booking lifecycle, availability management, status tracking
 
 ```typescript
 interface BookingService {
   // Booking Management
-  createBooking(customerId: string, serviceId: string, slot: TimeSlot): Promise<Booking>
-  confirmBooking(bookingId: string, providerId: string): Promise<void>
-  updateBookingStatus(bookingId: string, status: BookingStatus): Promise<void>
-  
+  createBooking(customerId: string, serviceId: string, slot: TimeSlot): Promise<Booking>;
+  confirmBooking(bookingId: string, providerId: string): Promise<void>;
+  updateBookingStatus(bookingId: string, status: BookingStatus): Promise<void>;
+
   // Availability
-  checkAvailability(serviceId: string, date: Date): Promise<TimeSlot[]>
-  blockTimeSlot(providerId: string, slot: TimeSlot): Promise<void>
+  checkAvailability(serviceId: string, date: Date): Promise<TimeSlot[]>;
+  blockTimeSlot(providerId: string, slot: TimeSlot): Promise<void>;
 }
 
-type BookingStatus = 'pending' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled'
+type BookingStatus = 'pending' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled';
 ```
 
 ### 4. Payment Service
+
 **Responsibility**: Payment processing, escrow management, payouts
 
 ```typescript
 interface PaymentService {
   // Payment Processing
-  createPaymentIntent(bookingId: string, amount: number): Promise<PaymentIntent>
-  capturePayment(paymentId: string): Promise<Payment>
-  processRefund(paymentId: string, amount?: number): Promise<Refund>
-  
+  createPaymentIntent(bookingId: string, amount: number): Promise<PaymentIntent>;
+  capturePayment(paymentId: string): Promise<Payment>;
+  processRefund(paymentId: string, amount?: number): Promise<Refund>;
+
   // Escrow Management
-  holdFunds(paymentId: string): Promise<void>
-  releaseFunds(paymentId: string, providerId: string): Promise<void>
-  
+  holdFunds(paymentId: string): Promise<void>;
+  releaseFunds(paymentId: string, providerId: string): Promise<void>;
+
   // Provider Payouts
-  createPayout(providerId: string, amount: number): Promise<Payout>
-  getEarnings(providerId: string, period: DateRange): Promise<Earnings>
+  createPayout(providerId: string, amount: number): Promise<Payout>;
+  getEarnings(providerId: string, period: DateRange): Promise<Earnings>;
 }
 ```
 
 ### 5. Search Service
+
 **Responsibility**: Service discovery, filtering, ranking
 
 ```typescript
 interface SearchService {
   // Service Discovery
-  searchServices(query: SearchQuery): Promise<SearchResult[]>
-  getServicesByCategory(category: string, location: Location): Promise<Service[]>
-  getServicesByProvider(providerId: string): Promise<Service[]>
-  
+  searchServices(query: SearchQuery): Promise<SearchResult[]>;
+  getServicesByCategory(category: string, location: Location): Promise<Service[]>;
+  getServicesByProvider(providerId: string): Promise<Service[]>;
+
   // Indexing
-  indexService(service: Service): Promise<void>
-  updateServiceIndex(serviceId: string, updates: Partial<Service>): Promise<void>
+  indexService(service: Service): Promise<void>;
+  updateServiceIndex(serviceId: string, updates: Partial<Service>): Promise<void>;
 }
 
 interface SearchQuery {
-  text?: string
-  location: Location
-  category?: string
-  priceRange?: [number, number]
-  rating?: number
-  availability?: Date
+  text?: string;
+  location: Location;
+  category?: string;
+  priceRange?: [number, number];
+  rating?: number;
+  availability?: Date;
 }
 ```
 
@@ -272,7 +280,7 @@ jobs:
       - run: npm ci
       - run: npm run test
       - run: npm run build
-      
+
   deploy:
     needs: test
     runs-on: ubuntu-latest
@@ -293,22 +301,22 @@ const config = {
   development: {
     supabase: {
       url: process.env.NEXT_PUBLIC_SUPABASE_URL,
-      anonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+      anonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     },
     stripe: {
-      publishableKey: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY_TEST
-    }
+      publishableKey: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY_TEST,
+    },
   },
   production: {
     supabase: {
       url: process.env.NEXT_PUBLIC_SUPABASE_URL,
-      anonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+      anonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     },
     stripe: {
-      publishableKey: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
-    }
-  }
-}
+      publishableKey: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
+    },
+  },
+};
 ```
 
 ---
@@ -316,30 +324,33 @@ const config = {
 ## 🔒 SECURITY FRAMEWORK
 
 ### Authentication & Authorization
+
 - **JWT Tokens**: Short-lived access tokens (15 min) + long-lived refresh tokens (30 days)
 - **Role-Based Access Control**: Customer, Provider, Admin roles with granular permissions
 - **API Rate Limiting**: 100 requests/minute per user, 1000/minute per IP
 - **CORS Configuration**: Strict origin policies for production
 
 ### Data Protection
+
 - **Encryption at Rest**: Database encryption via Supabase/managed services
 - **Encryption in Transit**: HTTPS everywhere, TLS 1.3 minimum
 - **PII Handling**: Minimal data collection, GDPR-compliant deletion
 - **Payment Security**: PCI DSS compliance via Stripe, no card data storage
 
 ### KYC & Compliance
+
 ```typescript
 interface KYCRequirements {
   providers: {
-    identity: 'government_id' | 'passport' | 'drivers_license'
-    business: 'business_license' | 'tax_registration'
-    address: 'utility_bill' | 'bank_statement'
-  }
+    identity: 'government_id' | 'passport' | 'drivers_license';
+    business: 'business_license' | 'tax_registration';
+    address: 'utility_bill' | 'bank_statement';
+  };
   verification: {
-    automated: boolean // OCR + identity verification APIs
-    manual: boolean    // Admin review for edge cases
-    turnaround: '24_hours'
-  }
+    automated: boolean; // OCR + identity verification APIs
+    manual: boolean; // Admin review for edge cases
+    turnaround: '24_hours';
+  };
 }
 ```
 
@@ -348,24 +359,28 @@ interface KYCRequirements {
 ## 📊 SCALABILITY ROADMAP
 
 ### Phase 1: MVP (1K users)
+
 - Single Postgres instance
 - Supabase managed services
 - Vercel serverless functions
 - Basic monitoring with Sentry
 
 ### Phase 2: Growth (10K users)
+
 - Read replicas for database
 - Redis caching layer
 - CDN for static assets
 - Advanced monitoring with Datadog
 
 ### Phase 3: Scale (100K users)
+
 - Database sharding by geography
 - Microservices architecture
 - Kubernetes orchestration
 - Event-driven architecture
 
 ### Phase 4: Enterprise (1M+ users)
+
 - Multi-region deployment
 - Event sourcing + CQRS
 - Machine learning pipeline
@@ -376,9 +391,10 @@ interface KYCRequirements {
 ## 🔍 MONITORING & OBSERVABILITY
 
 ### Error Tracking & Performance
+
 ```typescript
 // Sentry configuration
-import * as Sentry from '@sentry/nextjs'
+import * as Sentry from '@sentry/nextjs';
 
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
@@ -386,15 +402,16 @@ Sentry.init({
   beforeSend(event) {
     // Filter sensitive data
     if (event.request?.data) {
-      delete event.request.data.password
-      delete event.request.data.paymentMethod
+      delete event.request.data.password;
+      delete event.request.data.paymentMethod;
     }
-    return event
-  }
-})
+    return event;
+  },
+});
 ```
 
 ### Key Metrics Dashboard
+
 - **Performance**: Response times, Core Web Vitals, error rates
 - **Business**: GMV, booking conversion, user retention
 - **Infrastructure**: Database performance, API latency, uptime
@@ -402,4 +419,4 @@ Sentry.init({
 
 ---
 
-**Architecture Decision**: Start with velocity-first stack for MVP, with clear migration path to production-grade infrastructure as we scale.**
+**Architecture Decision**: Start with velocity-first stack for MVP, with clear migration path to production-grade infrastructure as we scale.\*\*

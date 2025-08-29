@@ -1,7 +1,8 @@
 ---
-type: "agent_requested"
-description: "Example description"
+type: 'agent_requested'
+description: 'Example description'
 ---
+
 # Futuristic Design Elements Rules
 
 ## Next-Generation Interface Innovation Standards

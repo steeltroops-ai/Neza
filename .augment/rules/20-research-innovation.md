@@ -1,7 +1,8 @@
 ---
-type: "always_apply"
-description: "Example description"
+type: 'always_apply'
+description: 'Example description'
 ---
+
 # Research & Innovation Methodologies Rules
 
 ## Advanced Standards for Scientific Research and Breakthrough Innovation

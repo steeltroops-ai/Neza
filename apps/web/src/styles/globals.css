@@ -1,0 +1,181 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import Inter font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+@layer base {
+  :root {
+    /* Neza Design Tokens */
+    --neza-primary-50: #f0f9ff;
+    --neza-primary-100: #e0f2fe;
+    --neza-primary-500: #0ea5e9;
+    --neza-primary-600: #0284c7;
+    --neza-primary-700: #0369a1;
+    --neza-primary-900: #0c4a6e;
+
+    --neza-success-50: #f0fdf4;
+    --neza-success-500: #22c55e;
+    --neza-success-600: #16a34a;
+
+    --neza-warning-50: #fffbeb;
+    --neza-warning-500: #f59e0b;
+
+    --neza-error-50: #fef2f2;
+    --neza-error-500: #ef4444;
+
+    --neza-neutral-0: #ffffff;
+    --neza-neutral-50: #fafafa;
+    --neza-neutral-100: #f5f5f5;
+    --neza-neutral-200: #e5e5e5;
+    --neza-neutral-300: #d4d4d4;
+    --neza-neutral-400: #a3a3a3;
+    --neza-neutral-500: #737373;
+    --neza-neutral-600: #525252;
+    --neza-neutral-700: #404040;
+    --neza-neutral-800: #262626;
+    --neza-neutral-900: #171717;
+  }
+
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-neutral-0 text-neutral-800 antialiased;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  }
+
+  /* Focus styles for accessibility */
+  *:focus-visible {
+    @apply outline-primary-500 outline-2 outline-offset-2;
+  }
+
+  /* Remove default button styles */
+  button {
+    @apply focus:outline-none;
+  }
+
+  /* Smooth transitions for interactive elements */
+  a,
+  button,
+  input,
+  textarea,
+  select {
+    @apply transition-colors duration-200 ease-in-out;
+  }
+}
+
+@layer components {
+  /* Neza Button Components */
+  .btn-primary {
+    @apply bg-primary-500 hover:bg-primary-600 focus:ring-primary-500 inline-flex items-center justify-center rounded-lg border border-transparent px-4 py-2 text-sm font-medium text-white shadow-sm transition-all duration-200 focus:ring-2 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btn-secondary {
+    @apply text-primary-700 bg-primary-50 border-primary-200 hover:bg-primary-100 focus:ring-primary-500 inline-flex items-center justify-center rounded-lg border px-4 py-2 text-sm font-medium shadow-sm transition-all duration-200 focus:ring-2 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btn-outline {
+    @apply focus:ring-primary-500 inline-flex items-center justify-center rounded-lg border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 shadow-sm transition-all duration-200 hover:bg-neutral-50 focus:ring-2 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  /* Neza Card Components */
+  .card {
+    @apply rounded-xl border border-neutral-200 bg-white p-6 shadow-sm;
+  }
+
+  .card-hover {
+    @apply card transition-all duration-200 hover:border-neutral-300 hover:shadow-md;
+  }
+
+  /* Neza Input Components */
+  .input-primary {
+    @apply focus:ring-primary-500 focus:border-primary-500 block w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm placeholder-neutral-400 shadow-sm transition-all duration-200 focus:ring-2 disabled:bg-neutral-50 disabled:text-neutral-500;
+  }
+
+  /* Neza Typography */
+  .text-display-lg {
+    @apply text-4xl font-bold tracking-tight text-neutral-900 sm:text-5xl;
+  }
+
+  .text-display-md {
+    @apply text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl;
+  }
+
+  .text-display-sm {
+    @apply text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl;
+  }
+
+  .text-heading-lg {
+    @apply text-xl font-semibold text-neutral-900 sm:text-2xl;
+  }
+
+  .text-heading-md {
+    @apply text-lg font-semibold text-neutral-900 sm:text-xl;
+  }
+
+  .text-heading-sm {
+    @apply text-base font-semibold text-neutral-900 sm:text-lg;
+  }
+
+  .text-body-lg {
+    @apply text-lg text-neutral-600;
+  }
+
+  .text-body-md {
+    @apply text-base text-neutral-600;
+  }
+
+  .text-body-sm {
+    @apply text-sm text-neutral-600;
+  }
+}
+
+@layer utilities {
+  /* Custom utilities */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.3s ease-out;
+  }
+
+  .animate-slide-down {
+    animation: slideDown 0.3s ease-out;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.2s ease-out;
+  }
+
+  /* Scrollbar styling */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: theme('colors.neutral.300') theme('colors.neutral.100');
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: theme('colors.neutral.100');
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: theme('colors.neutral.300');
+    border-radius: 3px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: theme('colors.neutral.400');
+  }
+}

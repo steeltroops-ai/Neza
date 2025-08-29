@@ -1,7 +1,8 @@
 ---
-type: "agent_requested"
-description: "Example description"
+type: 'agent_requested'
+description: 'Example description'
 ---
+
 # Enterprise Design System Architecture & Technical Integration Rules
 
 ## Comprehensive Standards for Scalable Design Systems with Advanced Technical Integration

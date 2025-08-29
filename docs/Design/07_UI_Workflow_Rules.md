@@ -9,9 +9,11 @@
 ## 🏗️ STRICT BUILD ORDER (MANDATORY SEQUENCE)
 
 ### Phase 1: Foundation Layer (Week 1)
+
 **Rule**: No feature development until foundation is complete and tested
 
 #### 1.1 Global Layout System
+
 ```tsx
 // MUST BUILD FIRST - All other components depend on this
 1. Layout Container System
@@ -40,6 +42,7 @@
 ```
 
 #### 1.2 Core UI Components
+
 ```tsx
 // MUST BUILD SECOND - Required by all features
 1. Button System
@@ -68,9 +71,11 @@
 ```
 
 ### Phase 2: Authentication & Core Pages (Week 1-2)
+
 **Rule**: Authentication must work before any user-specific features
 
 #### 2.1 Authentication Pages
+
 ```tsx
 // BUILD ORDER (No user features without auth)
 1. Login Page
@@ -98,6 +103,7 @@
 ```
 
 #### 2.2 Homepage Template
+
 ```tsx
 // BUILD AFTER AUTH - Marketing and conversion focus
 1. Hero Section
@@ -123,9 +129,11 @@
 ```
 
 ### Phase 3: Service Discovery & Booking (Week 2-3)
+
 **Rule**: Search must work before individual service pages
 
 #### 3.1 Service Discovery System
+
 ```tsx
 // BUILD ORDER (Search infrastructure first)
 1. Search Interface
@@ -154,6 +162,7 @@
 ```
 
 #### 3.2 Service Detail Pages
+
 ```tsx
 // BUILD AFTER SEARCH - Individual service focus
 1. Service Information
@@ -182,9 +191,11 @@
 ```
 
 ### Phase 4: Booking Flow & Payments (Week 3)
+
 **Rule**: Complete booking flow before dashboard features
 
 #### 4.1 Booking Process
+
 ```tsx
 // BUILD ORDER (Linear booking flow)
 1. Service Selection Confirmation
@@ -213,9 +224,11 @@
 ```
 
 ### Phase 5: User Dashboards (Week 3-4)
+
 **Rule**: Customer dashboard before provider dashboard
 
 #### 5.1 Customer Dashboard
+
 ```tsx
 // BUILD FIRST - Simpler user flow
 1. Dashboard Overview
@@ -244,6 +257,7 @@
 ```
 
 #### 5.2 Provider Dashboard
+
 ```tsx
 // BUILD SECOND - More complex business logic
 1. Business Overview
@@ -272,11 +286,15 @@
 ```
 
 ### Phase 6: Secondary Features (Week 4+)
+
 **Rule**: Only build after core user journeys are complete
 
 #### 6.1 Reviews and Ratings
+
 #### 6.2 Notifications System
+
 #### 6.3 Admin Panel
+
 #### 6.4 Advanced Features (loyalty, gamification, etc.)
 
 ---
@@ -284,6 +302,7 @@
 ## 🎯 DEPENDENCY RULES (NEVER VIOLATE)
 
 ### Component Dependencies
+
 ```tsx
 // ✅ CORRECT - Build parent components first
 Header → Navigation → User Menu → Profile Dropdown
@@ -296,6 +315,7 @@ Booking Flow → Booking Form → Form → Button
 ```
 
 ### Feature Dependencies
+
 ```tsx
 // ✅ CORRECT - Build supporting features first
 Authentication → User Profiles → Booking System → Reviews
@@ -308,6 +328,7 @@ Booking → Service Details → Service Listings → Search
 ```
 
 ### Data Dependencies
+
 ```tsx
 // ✅ CORRECT - Build data layer first
 Database Schema → API Endpoints → Data Fetching → UI Components
@@ -323,6 +344,7 @@ Analytics → Booking Management → Service Management → User Management
 ## ✅ CONSISTENCY CHECKLIST (MANDATORY FOR EVERY COMPONENT)
 
 ### Visual Consistency
+
 ```tsx
 // Color Usage Validation
 - [ ] Uses only approved color tokens from design system
@@ -330,7 +352,7 @@ Analytics → Booking Management → Service Management → User Management
 - [ ] Consistent color meanings across components
 - [ ] Proper color hierarchy (primary, secondary, accent)
 
-// Typography Validation  
+// Typography Validation
 - [ ] Uses approved font families and weights
 - [ ] Follows typography scale (H1-H6, body, caption)
 - [ ] Consistent line heights and letter spacing
@@ -344,6 +366,7 @@ Analytics → Booking Management → Service Management → User Management
 ```
 
 ### Interaction Consistency
+
 ```tsx
 // Button Behavior Validation
 - [ ] Consistent hover, focus, and active states
@@ -365,6 +388,7 @@ Analytics → Booking Management → Service Management → User Management
 ```
 
 ### Accessibility Validation
+
 ```tsx
 // WCAG 2.1 AA+ Compliance
 - [ ] Proper semantic HTML structure
@@ -380,6 +404,7 @@ Analytics → Booking Management → Service Management → User Management
 ## 🚫 ANTI-PATTERNS (NEVER ALLOW)
 
 ### Code Anti-Patterns
+
 ```tsx
 // ❌ NEVER DO - Inconsistent styling
 <div className="p-3 mb-5 text-blue-600"> // Random values
@@ -395,6 +420,7 @@ Analytics → Booking Management → Service Management → User Management
 ```
 
 ### Design Anti-Patterns
+
 ```tsx
 // ❌ NEVER DO - Inconsistent component variants
 <Button className="bg-red-500"> // Custom button color
@@ -410,6 +436,7 @@ onPress={handlePress} // Should be consistent
 ```
 
 ### Architecture Anti-Patterns
+
 ```tsx
 // ❌ NEVER DO - Building features out of order
 Building provider dashboard before customer dashboard
@@ -427,6 +454,7 @@ Creating reviews without booking system
 ## 📋 IMPLEMENTATION WORKFLOW
 
 ### Pre-Development Checklist
+
 ```tsx
 // Before starting any new component/feature:
 - [ ] Confirm all dependencies are built and tested
@@ -437,6 +465,7 @@ Creating reviews without booking system
 ```
 
 ### Development Process
+
 ```tsx
 // For each component/feature:
 1. Build component structure with proper semantic HTML
@@ -450,6 +479,7 @@ Creating reviews without booking system
 ```
 
 ### Quality Gates
+
 ```tsx
 // Component cannot be merged without:
 - [ ] Design system compliance validation
@@ -465,6 +495,7 @@ Creating reviews without booking system
 ## 🔄 MAINTENANCE RULES
 
 ### Regular Audits
+
 ```tsx
 // Monthly consistency audits:
 - [ ] Color usage across all components
@@ -475,6 +506,7 @@ Creating reviews without booking system
 ```
 
 ### Update Procedures
+
 ```tsx
 // When updating design system:
 1. Update design tokens first
@@ -486,6 +518,7 @@ Creating reviews without booking system
 ```
 
 ### Technical Debt Prevention
+
 ```tsx
 // Prevent accumulation of technical debt:
 - [ ] No custom CSS outside of design system
@@ -497,4 +530,4 @@ Creating reviews without booking system
 
 ---
 
-**UI Workflow Commitment**: Every component must follow the strict build order, pass all consistency checks, and maintain the premium design system standards. No exceptions for speed or convenience.**
+**UI Workflow Commitment**: Every component must follow the strict build order, pass all consistency checks, and maintain the premium design system standards. No exceptions for speed or convenience.\*\*

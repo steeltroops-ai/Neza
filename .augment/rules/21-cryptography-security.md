@@ -1,6 +1,6 @@
 ---
-type: "manual"
-description: "Example description"
+type: 'manual'
+description: 'Example description'
 ---
 
 # Cryptography & Advanced Security Rules

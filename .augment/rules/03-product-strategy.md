@@ -1,8 +1,8 @@
 ---
-type: "augment-code-optimized"
-use-when: "Product development, market strategy, user research, and go-to-market planning"
-priority: "high"
-decision-context: ["product-strategy", "market-analysis", "user-research", "business-model"]
+type: 'augment-code-optimized'
+use-when: 'Product development, market strategy, user research, and go-to-market planning'
+priority: 'high'
+decision-context: ['product-strategy', 'market-analysis', 'user-research', 'business-model']
 ---
 
 # Product Development and Strategy Rules
@@ -10,18 +10,21 @@ decision-context: ["product-strategy", "market-analysis", "user-research", "busi
 ## Elite Standards for Building Market-Dominating Products
 
 ### 🎯 WHEN TO USE THIS FILE
+
 - Developing product strategy and market positioning
 - Conducting market research and competitive analysis
 - Planning user research and feedback integration
 - Creating go-to-market and business model strategies
 
 ### ⚡ QUICK REFERENCE
+
 - **Market Analysis**: Comprehensive research and validation
 - **User Research**: Systematic feedback and behavior analysis
 - **Product Strategy**: Data-driven prioritization and roadmaps
 - **Business Model**: Sustainable revenue and growth strategies
 
 ### 🔀 DECISION TREE
+
 ```
 If analyzing market opportunity → Section 1
 If researching users and competitors → Section 2
@@ -74,6 +77,7 @@ These product development and strategy rules establish the gold standard for cre
 ---
 
 ### 📊 RULE PRIORITIES
+
 **🔴 Critical (Always Apply):** Rules 1-20, 41-60
 **🟡 Important (Context-Dependent):** Rules 21-40, 61-80
 **🟢 Optional (Enhancement):** Rules 81-90
@@ -83,6 +87,7 @@ These product development and strategy rules establish the gold standard for cre
 ### 🏆 SUCCESS METRICS
 
 **Product Excellence Achievement:**
+
 - Achieve product-market fit validation through user retention and satisfaction metrics
 - Maintain 90%+ user satisfaction scores and 4.5+ app store ratings
 - Achieve target user acquisition goals across MVP, growth, and enterprise phases
@@ -90,6 +95,7 @@ These product development and strategy rules establish the gold standard for cre
 - Generate sustainable revenue growth with clear path to profitability
 
 **Market Impact Success:**
+
 - Establish clear competitive differentiation and unique value proposition
 - Achieve target market share within defined market segments
 - Build strong brand recognition and thought leadership in target market
@@ -99,6 +105,7 @@ These product development and strategy rules establish the gold standard for cre
 ---
 
 ### 🔗 RELATED FILES
+
 - See `00-core-ai-behavior.md` for AI agent behavior and task management
 - See `02-development-standards.md` for technical implementation standards
 - See `04-visual-design.md` for user interface and experience design

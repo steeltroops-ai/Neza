@@ -1,5 +1,5 @@
 ---
-type: "manual"
+type: 'manual'
 ---
 
 # Master AI Agent Rulebook
